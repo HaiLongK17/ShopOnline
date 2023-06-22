@@ -1,0 +1,200 @@
+﻿@using ShopOnline.Utility
+@using Microsoft.AspNetCore.Http
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>@ViewData["Title"] - UTE</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <!-- Icon Font -->
+    @*<link rel="stylesheet" href="~/css/font-awesome.min.css">*@
+    <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" data-auto-replace-svg="nest"></script>
+    <link rel="stylesheet" href="~/css/pe-icon-7-stroke.css">
+    <!-- Plugins css file -->
+    <link rel="stylesheet" href="~/css/plugins.css">
+    <!-- Theme main style -->
+    <link rel="stylesheet" href="~/style.css">
+    <!-- Responsive css -->
+    <link rel="stylesheet" href="~/css/responsive.css">
+
+    <!-- Modernizr JS -->
+    <script src="~/js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <header class="header-section section sticker">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- logo -->
+                        <div class="header-logo float-left">
+                            <a style="color:black;font-size:25px" asp-area="" asp-controller="Home" asp-action="Index"><strong>UTE SHOP</strong></a>
+                        </div>
+                        <!-- header-search & total-cart -->
+                        <div class="float-right">
+                            <div class="header-option-btns float-right">
+                                <!-- header Account -->
+                                <div class="header-account float-left">
+                                    <ul>
+                                        <li>
+                                            <a href="#" data-toggle="dropdown"><i class="pe-7s-config"></i></a>
+                                            <ul class="dropdown-menu">
+                                                <partial name="_LoginSekiroPartial" />
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <!-- Header Cart -->
+                                <div class="header-cart float-left">
+                                    <!-- Cart Toggle -->
+
+                                    @if (HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssShoppingCartCount) != null)
+                                    {
+                                        <a class="cart-toggle" asp-area="Customer" asp-controller="Cart" asp-action="Index">
+                                            <i class="pe-7s-cart"></i>
+                                            @{
+                                                var count = HttpContextAccessor.HttpContext.Session.GetInt32(@SD.ssShoppingCartCount);
+                                            }
+                                            <span>@count</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="cart-toggle" href="#" data-toggle="dropdown">
+                                            <i class="pe-7s-cart"></i>
+                                            <span>0</span>
+                                        </a>
+                                    }
+
+                                </div>
+                            </div>
+                            <nav class="main-menu menu-right float-right">
+                                <ul>
+                                    <li class="active">
+                                        <a asp-area="Customer" asp-controller="Home" asp-action="Index">Trang Chủ</a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="Customer" asp-controller="Home" asp-action="Shop">Cửa Hàng</a>
+                                    </li>
+                                    <li>
+                                        <a asp-area="Customer" asp-controller="Order" asp-action="OrderHistory">Lịch Sử Đặt Hàng</a>
+                                    </li>
+                                    @if (User.IsInRole(SD.ManagerUser))
+                                    {
+                                        <li>
+                                            <a href="#">Quản Lý Nội Dung</a>
+                                            <ul class="sub-menu">
+                                                <li><a asp-area="Admin" asp-controller="Product" asp-action="Index">Sản Phẩm</a></li>
+                                                <li><a asp-area="Admin" asp-controller="Category" asp-action="Index">Loại Sản Phẩm</a></li>
+                                                <li><a asp-area="Admin" asp-controller="Supplier" asp-action="Index">Nhà Cung Cấp</a></li>
+                                                <li><a asp-area="Admin" asp-controller="Coupon" asp-action="Index">Mã Giảm Giá</a></li>
+                                                <li><a asp-area="Admin" asp-controller="Tag" asp-action="Index">Nhãn Sản Phẩm</a></li>
+                                            </ul>
+                                        </li>
+                                        <li>
+                                            <a href="#">Quản Lý Người Dùng</a>
+                                            <ul class="sub-menu">
+                                                <li><a asp-area="Admin" asp-controller="User" asp-action="Employee">Nhân Viên</a></li>
+                                                <li><a asp-area="Admin" asp-controller="User" asp-action="Index">Khách Hàng</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a asp-area="Admin" asp-controller="Order" asp-action="Index">Quản Lý Đơn Hàng</a></li>
+                                    }
+                                    @if (User.IsInRole(SD.CustomerOfficer) || User.IsInRole(SD.PackingUser) || User.IsInRole(SD.Shipper))
+                                    {
+                                        <li><a asp-area="Admin" asp-controller="Order" asp-action="Index">Quản Lý Đơn Hàng</a></li>
+                                    }
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="mobile-menu"></div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="page-section section pt-120 pb-120">
+            <div class="container">
+                <div class="row">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-top-section section pt-100 pb-60">
+            <div class="container">
+                <div class="row">
+                    <div class="footer-widget col-lg-4 col-md-12 mb-40">
+                        <h5 class="widget-title">Về Cửa Hàng Của Chúng Tôi</h5>
+                        <p>Cửa hàng chúng tôi luôn cam kết đem lại những sản phẩm công nghệ tiên tiến, chất lượng cao của các hãng sản xuất hàng đầu thế giới. Sản phẩm của chúng tôi cung cấp bao gồm các thiết bị máy tính, các sản phẩm chơi game và linh phụ kiện… Chúng tôi luôn nỗ lực cung cấp cho khách hàng trải nghiệm mua sắm hoàn hảo nhất trong lĩnh vực hi-tech và máy tính.</p>
+                    </div>
+
+                    <div class="footer-widget text-center col-lg-4 col-md-12 mb-40">
+                        <h5 class="widget-title">Cá Nhân</h5>
+                        <ul>
+                            <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Tài Khoản Của Tôi</a></li>
+                            <li><a asp-area="Customer" asp-controller="Cart" asp-action="Index">Giỏ Hàng</a></li>
+                            <li><a asp-area="Customer" asp-controller="Cart" asp-action="Summary">Thanh Toán</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-widget col-lg-1 col-md-12 mb-40">
+
+                    </div>
+
+                    <div class="footer-widget col-lg-3 col-md-12 mb-40">
+                        <h5 class="widget-title">ĐĂNG KÍ ĐỂ NHẬN THÔNG TIN TỪ CHÚNG TÔI</h5>
+                        <form action="http://devitems.us11.list-manage.com/subscribe/post?u=6bbb9b6f5827bd842d9640c82&amp;id=05d85f18ef" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="sunscribe-form validate" target="_blank" novalidate>
+                            <div id="mc_embed_signup_scroll">
+                                <label for="mce-EMAIL" class="hidden">Subscribe to our mailing list</label>
+                                <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Địa Chỉ Email" required>
+                                <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_6bbb9b6f5827bd842d9640c82_05d85f18ef" tabindex="-1" value=""></div>
+                                <div class="clear"><input type="submit" value="Đăng Kí" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+                            </div>
+                        </form>
+                        <div class="footer-social fix">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom-section section">
+            <div class="container">
+                <div class="row">
+                    <div class="copyright text-left col-sm-6 col-xs-12">
+                        <p>Powered by <a href="#">UTE</a></p>
+                    </div>
+                    <div class="footer-menu text-right col-sm-6 col-xs-12">
+                        <a href="#">Help & Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="~/js/bootstrap.min.js"></script>
+    <!-- Plugins js -->
+    <script src="~/js/plugins.js"></script>
+    <!-- Ajax Mail js -->
+    <script src="~/js/ajax-mail.js"></script>
+    <!-- Main js -->
+    <script src="~/js/main.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

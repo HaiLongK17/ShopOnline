@@ -1,0 +1,163 @@
+﻿@model ShopOnline.Models.ViewModel.IndexViewModel
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+@section Slider{
+    <div class="home-slider-section section">
+        <div class="slider" id="home-slider">
+            <img src="~/images/banners/SecondBanner.jpg" />
+            <img src="~/images/banners/Best choose for gamer.jpg" />
+        </div>
+    </div>
+}
+
+<h2 class="text-white text-center">Sản Phẩm Mới Về</h2>
+<br />
+<div class="row mb-40">
+    <div class="col-xs-12 mb-40">
+        <div class="pro-thumb-img-slider">
+            @foreach (var product in Model.Products.Where(p => p.Tag.Name == "Latest Product"))
+            {
+                <div class="isotope-item col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-50">
+                    <div class="product-item text-center">
+                        <div class="product-img">
+                            <a class="image" asp-action="Details" asp-route-id="@product.Id"><img src="@product.Image" alt="" /></a>
+                            <div class="action-btn fix">
+                                <a href="#" data-toggle="modal" data-target="#@product.SortName.Replace(" ",string.Empty)" title="Quick View"><i class="pe-7s-look"></i>Xem nhanh</a>
+                                <a asp-action="Details" asp-route-id="@product.Id" title="Add to Cart"><i class="pe-7s-box2"></i>xem chi tiết</a>
+                            </div>
+                        </div>
+                        <div class="product-info text-left">
+                            <h5 class="title"><a asp-action="Details" asp-route-id="@product.Id" style="width:240px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="@product.SortName">@product.SortName</a></h5>
+                            <div class="price-ratting fix">
+                                <span class="price float-left">@product.Price.ToString("#,##0") VND</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<br />
+<h2 class="text-white text-center">Sản Phẩm Bán Chạy</h2>
+<br />
+<div class="row mb-40">
+    <div class="col-xs-12 mb-40">
+        <div class="pro-thumb-img-slider">
+            @foreach (var product in Model.Products.Where(p => p.Tag.Name == "Best Seller"))
+            {
+                <div class="isotope-item col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-50">
+                    <div class="product-item text-center">
+                        <div class="product-img">
+                            <a class="image" asp-action="Details" asp-route-id="@product.Id"><img src="@product.Image" alt="" /></a>
+                            <div class="action-btn fix">
+                                <a href="#" data-toggle="modal" data-target="#@product.SortName.Replace(" ",string.Empty)" title="Quick View"><i class="pe-7s-look"></i>Xem nhanh</a>
+                                <a asp-action="Details" asp-route-id="@product.Id" title="Add to Cart"><i class="pe-7s-box2"></i>xem chi tiết</a>
+                            </div>
+                        </div>
+                        <div class="product-info text-left">
+                            <h5 class="title"><a asp-action="Details" asp-route-id="@product.Id" style="width:240px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="@product.SortName">@product.SortName</a></h5>
+                            <div class="price-ratting fix">
+                                <span class="price float-left">@product.Price.ToString("#,##0") VND</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<br />
+<h2 class="text-white text-center">Các Sản Phẩm Khác</h2>
+<br />
+<div class="isotope-grid row">
+    @foreach (var product in Model.Products.Where(p=>p.Tag.Name=="-None-"))
+    {
+        <div class="isotope-item col-lg-3 col-md-4 col-sm-6 col-xs-12 mb-50">
+            <div class="product-item text-center">
+                <div class="product-img">
+                    <a class="image" asp-action="Details" asp-route-id="@product.Id"><img src="@product.Image" alt="" /></a>
+                    <div class="action-btn fix">
+                        <a href="#" data-toggle="modal" data-target="#@product.SortName.Replace(" ",string.Empty)" title="Quick View"><i class="pe-7s-look"></i>Xem nhanh</a>
+                        <a asp-action="Details" asp-route-id="@product.Id" title="Add to Cart"><i class="pe-7s-box2"></i>xem chi tiết</a>
+                    </div>
+                </div>
+                <div class="product-info text-left">
+                    <h5 class="title"><a asp-action="Details" asp-route-id="@product.Id" style="width:240px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis" title="@product.SortName">@product.SortName</a></h5>
+                    <div class="price-ratting fix">
+                        <span class="price float-left">@product.Price.ToString("#,##0") VND</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<br />
+<div class="row">
+    <div class="text-center col-xs-12 mt-30">
+        <a asp-action="Shop" class="btn">Nhiều hơn nữa</a>
+    </div>
+</div>
+
+@section QuickView{
+    @foreach (var pro in Model.Products)
+    {
+        <div id="@pro.SortName.Replace(" ",string.Empty)" class="modal fade">
+            <div class="container">
+                <div class="modal-content row">
+                    <div class="modal-body">
+                        <button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                        <div class="col-md-5 col-sm-6 col-xs-12 mb-40">
+                            <div class="tab-content mb-10">
+                                <div class="pro-large-img tab-pane active">
+                                    <img src="@pro.HQImage" alt="" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-7 col-sm-6 col-xs-12 mb-40">
+                            <div class="product-details section">
+                                <h1 class="title">@pro.Name</h1>
+                                <div class="price-ratting section">
+                                    <span class="price float-left"><span class="new">@pro.Price.ToString("#,##0") VND</span></span>
+                                </div>
+                                <div class="short-desc section">
+                                    <h5 class="pd-sub-title">Đôi nét về sản phẩm</h5>
+                                    <p>@Html.Raw(pro.Description)</p>
+                                </div>
+                                <div class="quantity-cart section">
+                                    <a asp-action="Details" asp-route-id="@pro.Id" class="add-to-cart">Xem Thêm Chi Tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@section BrandImg{
+    <div class="page-section section pt-10 pb-10">
+        <h2 class="text-white text-center">Thương Hiệu Nổi Tiếng</h2>
+        <div class="container">
+            <div class="row mb-40">
+                <div class="col-xs-12 mb-40">
+                    <div class="pro-thumb-img-slider">
+                        @foreach (var img in Model.Suppliers)
+                        {
+                            <div><a href="#" data-toggle="tab"><img src="@img.BrandImage" style="max-width:100%;height:auto" alt="" /></a></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+

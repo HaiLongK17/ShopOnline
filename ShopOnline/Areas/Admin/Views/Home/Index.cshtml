@@ -1,0 +1,122 @@
+﻿@using System.Web
+@using System.Security.Claims
+@using ShopOnline.Utility
+@model ShopOnline.Models.ViewModel.OrderViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<section class="content">
+    <div class="container-fluid">
+        @if (User.IsInRole(SD.ManagerUser))
+        {
+            <h5 class="mt-4 mb-2">Tình Hình Kinh Doanh</h5><br />
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-info">
+                        <div class="inner">
+                            <h3>@Model.Orders.Where(o => o.Status.Equals(SD.StatusSubmitted)).Count()</h3>
+
+                            <p>Đơn Hàng Mới</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-bag"></i>
+                        </div>
+                        <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="small-box-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-success">
+                        <div class="inner">
+                            <h3>@Model.Orders.Where(o => o.Status != SD.StatusCancelled && o.Status != SD.StatusCancelOnWeb).Count()</h3>
+
+                            <p>Đơn Hàng Đang Xử Lý</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="small-box-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-danger">
+                        <div class="inner">
+                            <h3>@Model.Orders.Where(o => o.Status == SD.StatusCancelled || o.Status == SD.StatusCancelOnWeb).Count()</h3>
+
+                            <p>Đơn Hàng Thất Bại</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-times"></i>
+                        </div>
+                        <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="small-box-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="small-box bg-warning">
+                        <div class="inner">
+                            <h3>@Model.Users.Where(u => u.RoleName == SD.CustomerUser).Count() <span class="text-sm text-danger">(@Model.Users.Where(a => a.RoleName == SD.CustomerUser && a.LockoutEnd > DateTime.Now).Count() Tài khoản bị khoá)</span></h3>
+
+                            <p>Khách Hàng</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <a asp-area="Admin" asp-controller="User" asp-action="Index" class="small-box-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- AREA CHART -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart">
+                                <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br /><hr />
+        }
+        <h5 class="mt-4 mb-2">Nhân Sự Công Ty</h5>
+        <br />
+        <div class="row">
+            @foreach (var user in Model.Users.Where(a => a.RoleName != SD.CustomerUser && (a.LockoutEnd <= DateTime.Now || a.LockoutEnd == null)))
+            {
+                <div class="col-md-3">
+                    <div class="card card-widget widget-user">
+                        <div class="widget-user-header bg-info">
+                            <h3 class="widget-user-username">@user.FullName</h3>
+                            <h5 class="widget-user-desc">@user.Email</h5>
+                        </div>
+                        <div class="widget-user-image">
+                            <img class="img-circle elevation-2" src="~/Admin/dist/img/unnamed.jpg" alt="User Avatar">
+                        </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="description-block">
+                                        <h5 class="description-header">@user.PhoneNumber</h5>
+                                        <span class="description-text">@user.RoleName</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

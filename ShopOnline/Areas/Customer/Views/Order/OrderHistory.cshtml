@@ -1,0 +1,318 @@
+﻿@using ShopOnline.Utility
+@model IEnumerable<ShopOnline.Models.ViewModel.OrderDetailsViewModel>
+@{
+    ViewData["Title"] = "Order History";
+    Layout = "~/Views/Shared/_CartLayout.cshtml";
+}
+
+<br />
+<h1 class="text-center" style="font-weight:bold">Lịch Sử Đặt Hàng</h1>
+<br />
+<hr />
+<br />
+
+<div class="col-xs-12">
+    @if (Model.Count() > 0)
+    {
+        <div class="wishlist-table table-responsive mb-30 mt-30">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="pro-remove">
+                            @Html.DisplayNameFor(m => m.Orders.Id)
+                        </th>
+                        <th class="pro-stock-stauts">
+                            Người Đặt Hàng
+                        </th>
+                        <th class="pro-stock-stauts">
+                            @Html.DisplayNameFor(m => m.Orders.ApplicationUser.Email)
+                        </th>
+                        <th class="pro-stock-stauts">
+                            @Html.DisplayNameFor(m => m.Orders.OrderDate)
+                        </th>
+                        <th class="pro-price">
+                            @Html.DisplayNameFor(m => m.Orders.OrderTotal)
+                        </th>
+                        <th class="pro-remove">
+                            Số Sản Phẩm
+                        </th>
+                        <th class="pro-add-to-cart"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="pro-remove">
+                                @Html.DisplayFor(m => item.Orders.Id)
+                            </td>
+                            <td class="pro-stock-stauts">
+                                @Html.DisplayFor(m => item.Orders.OrderName)
+                            </td>
+                            <td class="pro-stock-stauts">
+                                @Html.DisplayFor(m => item.Orders.ApplicationUser.Email)
+                            </td>
+                            <td class="pro-stock-stauts">
+                                @Html.DisplayFor(m => item.Orders.OrderDate)
+                            </td>
+                            <td class="pro-price">
+                                @item.Orders.OrderTotal.ToString("#,##0") VND
+                            </td>
+                            @{
+                                int cnt = 0;
+                                foreach (var countPro in item.OrderDetails)
+                                {
+                                    cnt += countPro.Count;
+                                }
+                            }
+                            <td class="pro-remove">
+                                @cnt
+                            </td>
+                            <td class="pro-add-to-cart">
+                                <div class="btn-group">
+                                    <button class="btn" href="#" data-toggle="modal" data-target="#@item.Orders.Id" title="Quick View" style="padding: 10px 20px"><i class="far fa-list-alt"></i>&ensp;Chi Tiết</button>
+                                    @if (item.Orders.Status != SD.StatusCancelOnWeb)
+                                    {
+                                        <button class="btn" href="#" data-toggle="modal" data-target="#@item.Orders.Status.Replace(" ",string.Empty)" title="Quick View" style="padding: 10px 20px"><i class="far fa-clock"></i>&ensp;Trạng Thái</button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-8 col-md-offset-2">
+            <div class="blog-item mb-20">
+                <div class="content fix">
+                    <blockquote>
+                        <p>"Bạn Chưa Đặt Bất Kì Đơn Hàng Nào"</p>
+                        <p>"Bạn Chưa Có Đơn Hàng Nào. Hãy Quay Lại Cửa Hàng Để Tiếp Tục Mua Sắm."</p>
+                    </blockquote>
+                    <div class="text-center">
+                        <button class="btn" asp-action="Shop" asp-area="Customer" asp-controller="Home">Quay Lại Cửa Hàng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@foreach (var order in Model)
+{
+    <div id="@order.Orders.Id" class="modal fade">
+        <div class="container">
+            <div class="checkout-form">
+                <div class="modal-content row">
+                    <div class="modal-body">
+                        <button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                        <form method="post">
+                            <div class="row">
+                                <div class="col-lg-7 col-md-6 mb-40">
+                                    <h3>Chi Tiết Hoá Đơn</h3>
+                                    <div class="row">
+                                        <input type="hidden" asp-for="@order.Orders.Id" />
+                                        <div class="col-xs-12 mb-30">
+                                            <label>Họ Tên</label>
+                                            <input asp-for="@order.Orders.OrderName" disabled id="txtName" type="text" />
+                                        </div>
+                                        <div class="col-xs-6 mb-30">
+                                            <label>Email</label>
+                                            <input asp-for="@order.Orders.ShipEmail" disabled id="txtEmail" type="text" />
+                                        </div>
+                                        <div class="col-xs-6 mb-30">
+                                            <label>Số Điện Thoại</label>
+                                            <input asp-for="@order.Orders.PhoneNumber" disabled id="txtPhone" type="text" />
+                                        </div>
+                                        <div class="col-xs-12 mb-30">
+                                            <label>Quốc Gia</label>
+                                            <input asp-for="@order.Orders.ShipCountry" disabled id="txtCountry" type="text" />
+                                        </div>
+                                        <div class="col-xs-6 mb-30">
+                                            <label>Địa Chỉ</label>
+                                            <input asp-for="@order.Orders.ShipAddress" disabled id="txtAddress" type="text" />
+                                        </div>
+                                        <div class="col-xs-6 mb-30">
+                                            <label>Thành Phố</label>
+                                            <input asp-for="@order.Orders.ShipCity" disabled id="txtCity" type="text" />
+                                        </div>
+                                        <div class="col-xs-12 mb-30">
+                                            <label>Ngày Đặt Hàng</label>
+                                            <input asp-for="@order.Orders.OrderDate" id="txtDate" disabled type="text" />
+                                        </div>
+                                        <div class="col-xs-12 mb-30">
+                                            <label>Comment</label>
+                                            <textarea asp-for="@order.Orders.Comment" disabled style="height:120px"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5 col-md-6 col-xs-12 mb-40 mt-20">
+                                    <div class="order-wrapper">
+                                        <div class="row">
+                                            <div class="col-md-10 mb-20">
+                                                <h4 class="text-muted">Mã Đơn Hàng: </h4>
+                                            </div>
+                                            <div class="col-md-2 mb-20">
+                                                <h4 class="text-muted text-right"><span class="badge badge-secondary badge-pill">@order.Orders.Id</span></h4>
+                                            </div>
+                                        </div>
+                                        <div class="order-table table-responsive mb-20">
+                                            <table class="mb-35">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="product-name">Sản Phẩm</th>
+                                                        <th class="product-total">Giá</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in order.OrderDetails)
+                                                    {
+                                                        @if (item.OrderId == order.Orders.Id)
+                                                        {
+                                                            <tr>
+                                                                <td class="product-details">
+                                                                    @item.Name <strong class="product-qty">× @item.Count</strong>
+                                                                </td>
+                                                                <td class="product-total">
+                                                                    <span class="amount">@((item.Price * item.Count).ToString("#,##0")) VND</span>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                            <table class="mb-35">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="product-name">Mã Giảm Giá</th>
+                                                        <th class="product-total">Tiền Giảm</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (order.Orders.CouponCode != null)
+                                                    {
+                                                        <tr>
+                                                            <td class="product-details">
+                                                                <strong style="color:deepskyblue">&nbsp;@order.Orders.CouponCode</strong>
+                                                            </td>
+                                                            <td class="product-total">-@Math.Round(order.Orders.CouponCodeDiscount, 2).ToString("#,##0") VND</td>
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        <tr>
+                                                            <td class="product-details">
+                                                                <strong style="color:darkred">&nbsp;Không Có</strong>
+                                                            </td>
+                                                            <td class="product-total">-@Math.Round(order.Orders.CouponCodeDiscount, 2) VND</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                            <table>
+                                                <thead>
+                                                    <tr>
+                                                        <th class="product-name">Thành Tiền</th>
+                                                        <th class="product-total"><strong>@Math.Round(order.Orders.OrderTotal, 2).ToString("#,##0") VND</strong></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div class="col-xs-12 mb-30">
+                                        <label class="text-muted">Trạng thái đơn hàng</label>
+                                        @if (order.Orders.Status == SD.StatusCancelled)
+                                        {
+                                            <input type="submit" disabled class="btn btn-danger form-control" value="Đã huỷ (Giao hàng thất bại)" />
+                                        }
+                                        else if (order.Orders.Status == SD.StatusCancelOnWeb)
+                                        {
+                                            <input type="submit" disabled class="btn btn-danger form-control" value="Bạn đã huỷ đơn hàng này" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" disabled class="btn btn-success form-control" value="@order.Orders.Status" />
+                                        }
+                                    </div>
+                                    <div class="col-xs-12 mb-30">
+                                        <label class="text-muted">Trạng thái thanh toán</label>
+                                        <input type="submit" disabled class="btn form-control" value="@order.Orders.PaymentStatus" />
+                                    </div>
+                                    @if (order.Orders.Status != SD.StatusCancelOnWeb && order.Orders.Status != SD.StatusCancelled && order.Orders.Status != SD.StatusCompleted)
+                                    {
+                                        <div class="col-xs-12 mb-30">
+                                            <label class="text-muted">Huỷ đơn hàng này</label>
+                                            <button type="submit" class="btn form-control" asp-action="CancelOnWeb" asp-route-OrderId="@order.Orders.Id">Huỷ</button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@foreach (var st in Model)
+{
+    <div id="@st.Orders.Status.Replace(" ", string.Empty)" class="modal fade">
+        <div class="container">
+            <div class="checkout-form">
+                <div class="modal-content row">
+                    <div class="modal-body">
+                        <button class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-6 mb-40">
+                                <h3 class="text-center text-muted">Theo dõi đơn hàng của bạn</h3>
+                                <div style="width:100%">
+                                    @if (st.Orders.Status == SD.StatusSubmitted)
+                                    {
+                                        <img src="~/images/Status/OrderPlaced.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusApproved)
+                                    {
+                                        <img src="~/images/Status/Approved.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusReadyPack)
+                                    {
+                                        <img src="~/images/Status/ReadyPack.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusInPackingProcess)
+                                    {
+                                        <img src="~/images/Status/Packing.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusReadyShip)
+                                    {
+                                        <img src="~/images/Status/ReadShip.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusShipping)
+                                    {
+                                        <img src="~/images/Status/Shipping.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusCompleted)
+                                    {
+                                        <img src="~/images/Status/Completed.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusCancelled)
+                                    {
+                                        <img src="~/images/Status/Cancelled.png" style="width:100%" />
+                                    }
+                                    @if (st.Orders.Status == SD.StatusCancelOnWeb)
+                                    {
+                                        <img src="~/images/Status/Cancelled.png" style="width:100%" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

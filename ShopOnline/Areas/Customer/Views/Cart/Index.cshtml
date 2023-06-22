@@ -1,0 +1,98 @@
+﻿@model ShopOnline.Models.ViewModel.OrderDetailsCart
+@{
+    ViewData["Title"] = "Cart";
+    Layout = "~/Views/Shared/_CartLayout.cshtml";
+}
+
+<br />
+<h1 class="text-center" style="font-weight:bold">Giỏ Hàng Của Bạn</h1>
+<br />
+<hr />
+<br />
+<form method="post">
+    @if (Model.lstCarts.Count > 0)
+    {
+        <input id="UserId" asp-for="@Model.lstCarts[0].ApplicationUserId" hidden />
+        <div class="col-xs-12">
+            <div class="cart-table table-responsive mb-40">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="pro-thumbnail">Ảnh</th>
+                            <th class="pro-title">Sản Phẩm</th>
+                            <th class="pro-price">Giá (VND)</th>
+                            <th class="pro-quantity">Thêm/Bớt Sản Phẩm</th>
+                            <th class="pro-remove">Xoá Khỏi Giỏ Hàng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.lstCarts)
+                        {
+                            <tr>
+                                <td class="pro-thumbnail"><a href="#"><img src="@item.Product.Image" alt="" /></a></td>
+                                <td class="pro-title"><a href="#">@item.Product.SortName</a></td>
+                                <td class="pro-quantity"><strong>@item.Product.Price.ToString("#,##0")<span class="text-muted"> ×</span> @item.Count</strong></td>
+                                <td class="pro-price">
+                                    @if (item.Product.UnitsInStock > 0)
+                                    {
+                                        <button type="submit" asp-action="Plus" asp-route-cartId="@item.Id" class="btn" style="padding: 10px 20px"><i class="fas fa-plus"></i></button>
+                                    }
+                                    &emsp;<button type="submit" asp-action="Minus" asp-route-cartId="@item.Id" class="btn" style="padding: 10px 20px"><i class="fas fa-minus"></i></button>
+                                </td>
+                                <td class="pro-remove"><button type="submit" class="btn" asp-action="Remove" asp-route-cartId="@item.Id"><i class="fas fa-trash"></i></button></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        <div class="col-md-8 col-sm-7 col-xs-12">
+            <div class="cart-buttons mb-30">
+                <a asp-area="" asp-controller="Home" asp-action="Shop">Tiếp Tục Mua Sắm</a>
+            </div>
+            <div class="cart-coupon mb-40">
+                <br />
+                <h4>Mã Giảm Giá</h4>
+                <p>Nhập mã giảm giá của bạn nếu có.</p>
+                <input asp-for="@Model.Orders.CouponCode" placeholder="Nhập ở đây..." />
+                <input type="submit" asp-action="AddCoupon" id="btnCoupon" value="Đồng Ý" />
+                <input type="submit" asp-action="RemoveCoupon" style="display:none;" id="btnRemoveCoupon" value="Apply Coupon" />
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-5 col-xs-12">
+            <div class="cart-total mb-40">
+                <h3>Tổng Cộng</h3>
+                <table>
+                    <tbody>
+                        <tr class="order-total">
+                            <td>
+                                <strong><span id="txtOrderTotal" class="amount">@Math.Round(Model.Orders.OrderTotal, 2).ToString("#,##0")</span></strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="proceed-to-checkout section mt-30">
+                    <a asp-action="Summary" asp-area="Customer" asp-controller="Cart">Tiến Hành Thanh Toán</a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-md-8 col-md-offset-2">
+            <div class="blog-item mb-20">
+                <div class="content fix">
+                    <blockquote>
+                        <p>"Bạn Chưa Thêm Sản Phẩm Nào"</p>
+                        <p>"Bạn Chưa Có Sản Phẩm Nào Trong Giỏ Hàng. Quay lại Cửa Hàng Để Tiếp Tục Mua Sắm."</p>
+                    </blockquote>
+                    <div class="text-center">
+                        <button class="btn" asp-action="Shop" asp-area="Customer" asp-controller="Home">Quay Lại Cửa Hàng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</form>
+

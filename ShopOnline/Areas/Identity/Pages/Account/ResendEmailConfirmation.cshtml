@@ -1,0 +1,27 @@
+﻿@page
+@model ResendEmailConfirmationModel
+@{
+    ViewData["Title"] = "Confirmation";
+}
+@section Top{
+    <div class="page-banner-section section">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="page-banner-content">
+                        <h1>Xác Nhận Email</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<blockquote>
+    <p>"Email xác nhận đã được gửi"</p>
+    <p>"Đường link xác nhận đã được gửi trong email của bạn. Vui lòng kiểm tra email để hoàn tất xác nhận tài khoản."</p>
+</blockquote>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

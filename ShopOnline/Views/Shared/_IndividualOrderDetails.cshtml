@@ -1,0 +1,127 @@
+﻿@model ShopOnline.Models.ViewModel.OrderDetailsViewModel
+<form method="post">
+    <div class="row">
+        <div class="col-lg-7 col-md-6 mb-40">
+            <h3>Chi Tiết Đơn Thanh Toán</h3>
+            <div class="row">
+                <input type="hidden" asp-for="Orders.Id" />
+                <div class="col-xs-12 mb-30">
+                    <label>Họ Tên <span class="required">*</span></label>
+                    <input asp-for="@Model.Orders.OrderName" disabled id="txtName" type="text" />
+                </div>
+                <div class="col-xs-6 mb-30">
+                    <label>Email <span class="required">*</span></label>
+                    <input asp-for="@Model.Orders.ShipEmail" disabled id="txtEmail" type="text" />
+                </div>
+                <div class="col-xs-6 mb-30">
+                    <label>Số Điện Thoại <span class="required">*</span></label>
+                    <input asp-for="@Model.Orders.PhoneNumber" disabled id="txtPhone" type="text" />
+                </div>
+                <div class="col-xs-12 mb-30">
+                    <label>Quốc Gia <span class="required">*</span></label>
+                    <input asp-for="@Model.Orders.ShipCountry" disabled id="txtCountry" type="text" />
+                </div>
+                <div class="col-xs-6 mb-30">
+                    <label>Địa Chỉ <span class="required">*</span></label>
+                    <input asp-for="@Model.Orders.ShipAddress" disabled id="txtAddress" type="text" />
+                </div>
+                <div class="col-xs-6 mb-30">
+                    <label>Thành Phố<span class="required">*</span></label>
+                    <input asp-for="@Model.Orders.ShipCity" disabled id="txtCity" type="text" />
+                </div>
+                <div class="col-xs-12 mb-30">
+                    <label>Ngày Đặt Hàng</label>
+                    <input asp-for="@Model.Orders.OrderDate" id="txtDate" disabled type="text" />
+                </div>
+                <div class="col-xs-12 mb-30">
+                    <label>Comment</label>
+                    <textarea asp-for="@Model.Orders.Comment" disabled style="height:120px"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-md-6 col-xs-12 mb-40">
+            <div class="order-wrapper">
+                <div class="row">
+                    <div class="col-md-10 mb-20">
+                        <h4 class="text-muted">Mã Đơn Hàng: </h4>
+                    </div>
+                    <div class="col-md-2 mb-20">
+                        <h4 class="text-muted text-right"><span class="badge badge-secondary badge-pill">@Model.Orders.Id</span></h4>
+                    </div>
+                </div>
+                <div class="order-table table-responsive mb-20">
+                    <table class="mb-35">
+                        <thead>
+                            <tr>
+                                <th class="product-name">Sản Phẩm</th>
+                                <th class="product-total">Giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ var total = 0.0; }
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                <tr>
+                                    <td class="product-details">
+                                        @item.Name <strong class="product-qty">× @item.Count</strong>
+                                    </td>
+                                    <td class="product-total">
+                                        <span class="amount">@Math.Round(item.Price * item.Count, 2).ToString("#,##0") VND</span>
+                                        @{ total += Math.Round(item.Price * item.Count, 2); }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table class="mb-35">
+                        <thead>
+                            <tr>
+                                <th class="product-name">Mã Giảm Giá</th>
+                                <th class="product-total">Tiền Giảm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Orders.CouponCode != null)
+                            {
+                                <tr>
+                                    <td class="product-details">
+                                        <strong style="color:deepskyblue">&nbsp;@Model.Orders.CouponCode</strong>
+                                    </td>
+                                    <td class="product-total">-@Math.Round(Model.Orders.CouponCodeDiscount, 2).ToString("#,##0") VND</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="product-details">
+                                        <strong style="color:darkred">&nbsp;Không Có</strong>
+                                    </td>
+                                    <td class="product-total">-@Math.Round(Model.Orders.CouponCodeDiscount, 2) VND</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="product-name">Thành Tiền</th>
+                                <th class="product-total"><strong>@Math.Round(Model.Orders.OrderTotal, 2).ToString("#,##0") VND</strong></th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            <br />
+            <div class="col-xs-12 mb-30">
+                <label class="text-muted">Trạng thái đơn hàng</label>
+                <input type="submit" disabled class="btn btn-success form-control" value="@Model.Orders.Status" />
+            </div>
+            <div class="col-xs-12 mb-30">
+                <label class="text-muted">Trạng thái thanh toán</label>
+                <input type="submit" disabled class="btn form-control" value="@Model.Orders.PaymentStatus" />
+            </div>
+        </div>
+    </div>
+</form>
+
+
