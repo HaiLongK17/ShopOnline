@@ -14,43 +14,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.cs" />
-		<Compile Remove="Data\Migrations\00000000000000_CreateIdentitySchema.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200527035056_AddCategoryToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200527035056_AddCategoryToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200527035353_AddSupplierToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200527035353_AddSupplierToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200527035441_AddTagToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200527035441_AddTagToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200527035529_AddCouponToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200527035529_AddCouponToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200527035630_AddProductToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200527035630_AddProductToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200527035737_AddApplicationUserToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200527035737_AddApplicationUserToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200528124755_Name.cs" />
-		<Compile Remove="Data\Migrations\20200528124755_Name.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200528125051_AddNameToAspNetUser.cs" />
-		<Compile Remove="Data\Migrations\20200528125051_AddNameToAspNetUser.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200528125429_AddFullNameToAspNetUser.cs" />
-		<Compile Remove="Data\Migrations\20200528125429_AddFullNameToAspNetUser.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200528130159_FullName.cs" />
-		<Compile Remove="Data\Migrations\20200528130159_FullName.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200529151333_AddShoppingCartToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200529151333_AddShoppingCartToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200529151838_AddShoppingCartToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200529151838_AddShoppingCartToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200529151956_AddShoppingCartToDatabase.cs" />
-		<Compile Remove="Data\Migrations\20200529151956_AddShoppingCartToDatabase.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200529152103_FullName.cs" />
-		<Compile Remove="Data\Migrations\20200529152103_FullName.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200529152251_FullName.cs" />
-		<Compile Remove="Data\Migrations\20200529152251_FullName.Designer.cs" />
-		<Compile Remove="Data\Migrations\20200626081012_RoleID.cs" />
-		<Compile Remove="Data\Migrations\20200626081012_RoleID.Designer.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<None Include="Views\Shared\Components\UserName\Default.cshtml" />
 	</ItemGroup>
 
